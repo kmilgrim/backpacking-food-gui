@@ -48,8 +48,6 @@ def login(username: str, password: str) -> bool:
 def signup(username, password):
     conn = sqlite3.connect("backpacking_food.db")
     c = conn.cursor()
-    print("username: ", username)
-    print("password: ", password)
 
     if username != '' and password != '':
         c.execute('SELECT username FROM user WHERE username=?', [username])

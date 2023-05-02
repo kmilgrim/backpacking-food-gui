@@ -4,11 +4,17 @@ from PIL import ImageTk, Image
 import sqlite3
 import bcrypt
 from database import *
+from main import *
+
+MAIN_APP = None
 
 
 def handle_login(username: str, password: str) -> None:
     if login(username, password):
         tkinter.messagebox.showinfo('Success', 'Login Success')
+        # open new window here
+        MAIN_APP = MainApp()
+
     else:
         tkinter.messagebox.showinfo(
             'Error', 'Username and Password are not valid')
