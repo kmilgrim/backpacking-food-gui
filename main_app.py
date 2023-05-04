@@ -6,6 +6,7 @@ import bcrypt
 from database import *
 from meal_add_window import *
 from meal_api import *
+from user_handle import *
 
 MAIN_APP = None
 
@@ -14,8 +15,7 @@ class App(customtkinter.CTk):
     def handle_login(self, username: str, password: str) -> None:
         if login(username, password):
             tkinter.messagebox.showinfo('Success', 'Login Success')
-            # open new window here
-            # MAIN_APP = MealAddWindow()
+
             self.login_frame.destroy()
             self.main_frame()
             createMeal("fried pickes", "pickles and fries",
