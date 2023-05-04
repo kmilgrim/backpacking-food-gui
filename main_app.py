@@ -5,6 +5,7 @@ import sqlite3
 import bcrypt
 from database import *
 from meal_add_window import *
+from meal_api import *
 
 MAIN_APP = None
 
@@ -17,6 +18,8 @@ class App(customtkinter.CTk):
             # MAIN_APP = MealAddWindow()
             self.login_frame.destroy()
             self.main_frame()
+            createMeal("fried pickes", "pickles and fries",
+                       10000, 3, 78, "today", "today")
 
         else:
             tkinter.messagebox.showinfo(

@@ -15,8 +15,34 @@ def create_user_table():
     # create all tables
     c.execute("""
         CREATE TABLE IF NOT EXISTS user (
+            id INTEGER PRIMARY KEY,
             username TEXT NOT NULL,
             password TEXT NOT NULL
+        )
+    """)
+
+    conn.commit()
+
+    conn.close()
+
+
+def create_meal_table():
+
+    # create database and cursor
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+
+    # create all tables
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS meal (
+            id INTEGER PRIMARY KEY,
+            mealName TEXT NOT NULL,
+            mealRecipe TEXT NOT NULL,
+            mealCalsPerServe INTEGER,
+            mealNumOfServe INTEGER, 
+            userId INTEGER NOT NULL,
+            createdAt TEXT NOT NULL,
+            updatedAt TEXT NOT NULL
         )
     """)
 
@@ -57,8 +83,8 @@ def signup(username, password):
             encoded_password = password.encode('utf-8')
             hashed_password = bcrypt.hashpw(encoded_password, bcrypt.gensalt())
             print(hashed_password)
-            c.execute('INSERT INTO user VALUES (?, ?)',
-                      [username, hashed_password])
+            c.execute('INSERT INTO user VALUES (?, ?, ?)',
+                      [None, username, hashed_password])
             conn.commit()
             tkinter.messagebox.showinfo('Success', 'Account has been created')
     elif username == '' or password == '':

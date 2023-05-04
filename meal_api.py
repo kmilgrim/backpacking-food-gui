@@ -31,8 +31,8 @@ def createMeal(mealName, mealRecipe, mealCalsPerServe, mealNumOfServe, userId, c
     conn = sqlite3.connect("backpacking_food.db")
     c = conn.cursor()
 
-    c.execute('INSERT INTO meal VALUES (?, ?, ?, ?, ?, ?, ?)',
-              [mealName, mealRecipe, mealCalsPerServe,
+    c.execute('INSERT INTO meal VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+              [None, mealName, mealRecipe, mealCalsPerServe,
                mealNumOfServe, userId, createdAt, updatedAt])
     conn.commit()
     tkinter.messagebox.showinfo('Success', 'Meal has been added.')
