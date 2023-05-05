@@ -133,7 +133,7 @@ class App(customtkinter.CTk):
             row=2, column=0, padx=15, pady=5, sticky="ns")
 
         self.button_delete_meal = customtkinter.CTkButton(
-            master=self, width=220, text='Delete Meals', corner_radius=6, fg_color=("black", "gray"))
+            master=self, width=220, text='Delete Meals', command=lambda: self.delete_meals(), corner_radius=6, fg_color=("black", "gray"))
         self.button_delete_meal.grid(
             row=3, column=0, padx=15, pady=5, sticky="ns")
 
@@ -187,6 +187,27 @@ class App(customtkinter.CTk):
 
         for ingredient in ingredient_list:
             self.textbox.insert("end", ingredient + "\n")
+
+    def delete_meals(self):
+        meal_list = []
+
+        try:
+            # get all selected meals
+            meals = self.scrollable_checkbox_frame.get_checked_items()
+
+            # find id of meals with the correct name
+            for meal in meals:
+                meal_data = searchMeal(meal)
+                if meal_data:
+                    meal_list.append(meal_data)
+                else:
+                    print(f"No data found for meal {meal}")
+        except Exception as e:
+            print(f"Error generating ingredients: {e}")
+
+        for meal in meal_list:
+            self.scrollable_checkbox_frame.remove_item(meal[0][1])
+            deleteMeal(meal[0][0])
 
 
 if __name__ == "__main__":
