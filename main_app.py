@@ -89,16 +89,15 @@ class App(customtkinter.CTk):
         ), self.entry_password.get()), width=220, text='Sign Up', corner_radius=6, fg_color=("black", "gray"))
         self.button_signup.place(x=50, y=280)
 
-    def main_frame(self):
-        create_meal_table()
-
     def checkbox_frame_event(self):
         print(
             f"checkbox frame modified: {self.scrollable_checkbox_frame.get_checked_items()}")
 
     def create_main_frame(self):
         self.login_frame.destroy()
-        self.main_frame()
+
+        # create/load the meal table from the database
+        create_meal_table()
 
         # create scrollable checkbox frame to show meals
         self.scrollable_checkbox_frame = ScrollableCheckBoxFrame(master=self, width=200, height=300, command=self.checkbox_frame_event,
@@ -108,16 +107,15 @@ class App(customtkinter.CTk):
         self.scrollable_checkbox_frame.add_item("new item")
 
         # button to add meals
-        # self.button_add_meal = customtkinter.CTkButton(
-        #     master=self.main_frame, text="Add a Meal", command=self.meal_add, width=200, height=20)
-        # self.button_add_meal.pack(padx=20, pady=10)
-        # self.button_add_meal.place(x=100, y=350)
+        self.button_signup = customtkinter.CTkButton(
+            master=self, command=self.meal_add, width=220, text='Add a Meal', corner_radius=6)
+        self.button_signup.place(x=15, y=350)
 
         # get the details entered by user
 
         # create meal with details
-        createMeal("fried pickes", "pickles and fries",
-                   10000, 3, 78, "today", "today")
+        # createMeal("fried pickes", "pickles and fries",
+        #            10000, 3, 78, "today", "today")
 
     def meal_add(self):
         print("yes")
