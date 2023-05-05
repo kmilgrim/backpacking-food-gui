@@ -160,19 +160,33 @@ class App(customtkinter.CTk):
         self.window_add_meal.focus()  # if window exists focus it
 
     def generate_ingredients(self):
-
         meal_list = []
         ingredient_list = []
-        # get all selected meals
-        meals = self.scrollable_checkbox_frame.get_checked_items()
 
-        i = 0
-        for meal in meals:
-            meal_list.append(searchMeal(meal))
-            ingredient_list.append(meal_list[i][0][2])
-            i += 1
+        try:
+            # get all selected meals
+            meals = self.scrollable_checkbox_frame.get_checked_items()
+
+            i = 0
+            for meal in meals:
+                meal_data = searchMeal(meal)
+                if meal_data:
+                    meal_list.append(meal_data)
+                    ingredient_list.append(meal_data[0][2])
+                    i += 1
+                else:
+                    print(f"No data found for meal {meal}")
+        except Exception as e:
+            print(f"Error generating ingredients: {e}")
 
         print(ingredient_list)
+        self.update_textbox(ingredient_list)
+
+    def update_textbox(self, ingredient_list):
+        self.textbox.delete("0.0", "end")  # delete all text
+
+        for ingredient in ingredient_list:
+            self.textbox.insert("end", ingredient + "\n")
 
 
 if __name__ == "__main__":
