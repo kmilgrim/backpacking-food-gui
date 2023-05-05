@@ -15,12 +15,14 @@ def login(username: str, password: str) -> bool:
         return False
 
     c.execute(
-        'SELECT username, password FROM user WHERE username=?', [username])
+        'SELECT id, password FROM user WHERE username=?', [username])
     db_res = c.fetchone()
     if db_res is None:
         return False
-    _, db_hashed_password = db_res
+    user_id, db_hashed_password = db_res
     if bcrypt.checkpw(password.encode('utf-8'), db_hashed_password):
+        # Update global state
+        GlobalState.get_instance().set_current_user_id(user_id)
         return True
     return False
 

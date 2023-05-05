@@ -38,3 +38,51 @@ def createMeal(mealName, mealRecipe, mealCalsPerServe, mealNumOfServe, userId, c
     tkinter.messagebox.showinfo('Success', 'Meal has been added.')
 
     conn.close()
+
+# update a meal
+
+
+def updateMeal(meal: Meal, attributeName, newValue, mealId):
+    conn = sqlite3.connect("backpacking_food.db")
+    c = conn.cursor()
+
+    try:
+        c.execute(f'UPDATE meal SET {attributeName} = ? WHERE id = ?',
+                  [newValue, mealId])
+        conn.commit()
+        print(
+            f"Meal attribute '{attributeName}' for meal with ID {mealId} has been updated.")
+    except sqlite3.Error as e:
+        print(f"Error updating meal attribute: {e}")
+    finally:
+        conn.close()
+
+
+# delete meals
+def deleteMeal(mealId):
+    conn = sqlite3.connect("backpacking_food.db")
+    c = conn.cursor()
+
+    try:
+        c.execute('DELETE FROM meal WHERE id = ?', [mealId])
+        conn.commit()
+        print(f"Meal with ID {mealId} has been deleted.")
+    except sqlite3.Error as e:
+        print(f"Error deleting meal: {e}")
+    finally:
+        conn.close()
+
+
+def searchMeal(mealName):
+    conn = sqlite3.connect("backpacking_food.db")
+    c = conn.cursor()
+
+    try:
+        c.execute('SELECT * FROM meal WHERE mealName LIKE ?',
+                  ['%' + mealName + '%'])
+        results = c.fetchall()
+        return results
+    except sqlite3.Error as e:
+        print(f"Error searching for meal: {e}")
+    finally:
+        conn.close()

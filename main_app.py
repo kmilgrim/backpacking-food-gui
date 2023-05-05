@@ -1,4 +1,5 @@
 import tkinter
+from typing import Optional
 import customtkinter
 from PIL import ImageTk, Image
 import sqlite3
@@ -10,8 +11,11 @@ from user_handle import *
 
 MAIN_APP = None
 
+DEBUG = False
 
 # create check box frame for showing all meals
+
+
 class ScrollableCheckBoxFrame(customtkinter.CTkScrollableFrame):
     def __init__(self, master, item_list, command=None, **kwargs):
         super().__init__(master, **kwargs)
@@ -38,13 +42,19 @@ class ScrollableCheckBoxFrame(customtkinter.CTkScrollableFrame):
     def get_checked_items(self):
         return [checkbox.cget("text") for checkbox in self.checkbox_list if checkbox.get() == 1]
 
+    def add_meal_to_checkbox_frame(self, meal_id):
+        meal_data = get_meal_name_from_db(meal_id)
+
+        if meal_data is not None:
+            self.add_item(meal_data)
+        else:
+            print(f"No meal found with ID {meal_id}")
+
 
 class App(customtkinter.CTk):
 
     def handle_login(self, username: str, password: str) -> None:
         if login(username, password):
-            tkinter.messagebox.showinfo('Success', 'Login Success')
-
             self.create_main_frame()
 
         else:
@@ -89,6 +99,10 @@ class App(customtkinter.CTk):
         ), self.entry_password.get()), width=220, text='Sign Up', corner_radius=6, fg_color=("black", "gray"))
         self.button_signup.place(x=50, y=280)
 
+        self.window_add_meal = None
+        if DEBUG:
+            self.create_main_frame()
+
     def checkbox_frame_event(self):
         print(
             f"checkbox frame modified: {self.scrollable_checkbox_frame.get_checked_items()}")
@@ -101,24 +115,64 @@ class App(customtkinter.CTk):
 
         # create scrollable checkbox frame to show meals
         self.scrollable_checkbox_frame = ScrollableCheckBoxFrame(master=self, width=200, height=300, command=self.checkbox_frame_event,
-                                                                 item_list=[f"meal {i}" for i in range(3)])
+                                                                 item_list=get_all_meal_names())
         self.scrollable_checkbox_frame.grid(
             row=0, column=0, padx=15, pady=15, sticky="ns")
         self.scrollable_checkbox_frame.add_item("new item")
 
         # button to add meals
-        self.button_signup = customtkinter.CTkButton(
-            master=self, command=self.meal_add, width=220, text='Add a Meal', corner_radius=6)
-        self.button_signup.place(x=15, y=350)
+        self.button_add_meal = customtkinter.CTkButton(
+            master=self, command=self.open_meal_add, width=220, text='Add a Meal', corner_radius=6)
+        self.button_add_meal.grid(
+            row=1, column=0, padx=15, pady=5, sticky="ns")
+
+        # buttons to generate ingredient list and delete meals from database
+        self.button_generate_ingredients = customtkinter.CTkButton(
+            master=self, width=220, text='Generate Ingredients', command=lambda: self.generate_ingredients(), corner_radius=6, fg_color=("black", "gray"))
+        self.button_generate_ingredients.grid(
+            row=2, column=0, padx=15, pady=5, sticky="ns")
+
+        self.button_delete_meal = customtkinter.CTkButton(
+            master=self, width=220, text='Delete Meals', corner_radius=6, fg_color=("black", "gray"))
+        self.button_delete_meal.grid(
+            row=3, column=0, padx=15, pady=5, sticky="ns")
+
+        # insert text box for the ingredients list
+        self.textbox = customtkinter.CTkTextbox(
+            master=self, width=300, corner_radius=0)
+        self.textbox.grid(
+            row=0, column=1, padx=15, pady=15, sticky="ns")
+        self.textbox.insert("0.0", "Ingredients List..." * 1)
 
         # get the details entered by user
 
         # create meal with details
         # createMeal("fried pickes", "pickles and fries",
-        #            10000, 3, 78, "today", "today")
+        #
+        #
+        #  10000, 3, 78, "today", "today")
 
-    def meal_add(self):
-        print("yes")
+    def open_meal_add(self):
+        if self.window_add_meal is None or not self.window_add_meal.winfo_exists():
+            # create window if its None or destroyed
+            self.window_add_meal = MealAddWindow(
+                new_meal_callback=self.scrollable_checkbox_frame.add_meal_to_checkbox_frame)
+        self.window_add_meal.focus()  # if window exists focus it
+
+    def generate_ingredients(self):
+
+        meal_list = []
+        ingredient_list = []
+        # get all selected meals
+        meals = self.scrollable_checkbox_frame.get_checked_items()
+
+        i = 0
+        for meal in meals:
+            meal_list.append(searchMeal(meal))
+            ingredient_list.append(meal_list[i][0][2])
+            i += 1
+
+        print(ingredient_list)
 
 
 if __name__ == "__main__":
