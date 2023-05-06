@@ -24,7 +24,7 @@ Once logged in, a main console window will open with options to add meals to the
 
 The user can select which meals they want to generate the ingredients for with the check boxes, and click on the "Generate Ingredients" button. 
 
-When adding a meal, the user can enter details in a separate window
+When adding a meal, the user can enter details in a separate window. Once the details are entered and "Add Meal" is pressed, the new meal will appear in the main console checkbox list along with previously added meals. 
 ![image](https://user-images.githubusercontent.com/61169077/236594776-bd2f7d95-4c29-44c1-82ff-e45b67e51fe5.png)
 
 ## Function
