@@ -180,7 +180,7 @@ class App(customtkinter.CTk):
             print(f"Error generating ingredients: {e}")
 
         print(ingredient_list)
-        self.update_textbox(ingredient_list)
+        self.generate_cal_count(ingredient_list)
 
     def update_textbox(self, ingredient_list):
         self.textbox.delete("0.0", "end")  # delete all text
@@ -208,6 +208,28 @@ class App(customtkinter.CTk):
         for meal in meal_list:
             self.scrollable_checkbox_frame.remove_item(meal[0][1])
             deleteMeal(meal[0][0])
+
+    def generate_cal_count(self, ingredient_list):
+        meal_list = []
+        calorie_count = 0
+
+        try:
+            # get all selected meals
+            meals = self.scrollable_checkbox_frame.get_checked_items()
+
+            for meal in meals:
+                meal_data = searchMeal(meal)
+                if meal_data:
+                    calorie_count += meal_data[0][3]
+                else:
+                    print(f"No data found for meal {meal}")
+        except Exception as e:
+            print(f"Error adding up calorie count of all meals: {e}")
+
+        print(calorie_count)
+        ingredient_list.append(
+            f"\nTotal Calories: {str(calorie_count)}")
+        self.update_textbox(ingredient_list)
 
 
 if __name__ == "__main__":
