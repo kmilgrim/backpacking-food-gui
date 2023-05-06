@@ -1,0 +1,17 @@
+# Use official Python v3.10.5 runtime as a parent image
+FROM python:3.10.5
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the requirements.txt file to the container
+COPY requirements.txt .
+
+# Install the required packages
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the main_app.py file to the container
+COPY ./backpacking-food-gui/main_app.py .
+
+# Run the main_app.py script when the container starts
+CMD ["python", "main_app.py"]
