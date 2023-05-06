@@ -14,6 +14,18 @@ Clone the repository /backpacking-food-gui, cd into the directory, and the app c
 ## Usage
 
 Once the application is started, a login page will pop up for the user to authenticate themselves before reaching app functionality:
+![image](https://user-images.githubusercontent.com/61169077/236593439-433fb900-e4a0-46db-ba14-c8814d5343c8.png)
+
+At this point, the user can enter credentials to login, if they already exist, or sign up if they don't.
+
+Once logged in, a main console window will open with options to add meals to the user's list, generate a list of ingredients for all the meals selected, and delete meals from the list. In the list of ingredients, a calorie count is also generated to help the user gauge whether they have enough food for their trip. 
+
+![image](https://user-images.githubusercontent.com/61169077/236594739-ef0acc5b-80f5-4f8a-84d1-30c6f574d5fb.png)
+
+The user can select which meals they want to generate the ingredients for with the check boxes, and click on the "Generate Ingredients" button. 
+
+When adding a meal, the user can enter details in a separate window
+![image](https://user-images.githubusercontent.com/61169077/236594776-bd2f7d95-4c29-44c1-82ff-e45b67e51fe5.png)
 
 ## Function
 
