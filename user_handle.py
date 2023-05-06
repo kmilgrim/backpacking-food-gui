@@ -36,13 +36,39 @@ def signup(username, password):
         if c.fetchone() is not None:
             tkinter.messagebox.showerror('Error', 'Username already exists.')
         else:
-            encoded_password = password.encode('utf-8')
-            hashed_password = bcrypt.hashpw(encoded_password, bcrypt.gensalt())
-            print(hashed_password)
-            c.execute('INSERT INTO user VALUES (?, ?, ?)',
-                      [None, username, hashed_password])
-            conn.commit()
-            tkinter.messagebox.showinfo('Success', 'Account has been created')
+            # Check password length
+            if len(password) < 8:
+                tkinter.messagebox.showerror(
+                    'Error', 'Password must be at least 8 characters long.')
+            else:
+                # Check password complexity
+                has_upper = False
+                has_lower = False
+                has_digit = False
+                has_special = False
+                for char in password:
+                    if char.isupper():
+                        has_upper = True
+                    elif char.islower():
+                        has_lower = True
+                    elif char.isdigit():
+                        has_digit = True
+                    else:
+                        has_special = True
+
+                if not (has_upper and has_lower and has_digit and has_special):
+                    tkinter.messagebox.showerror(
+                        'Error', 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.')
+                else:
+                    encoded_password = password.encode('utf-8')
+                    hashed_password = bcrypt.hashpw(
+                        encoded_password, bcrypt.gensalt())
+                    print(hashed_password)
+                    c.execute('INSERT INTO user VALUES (?, ?, ?)',
+                              [None, username, hashed_password])
+                    conn.commit()
+                    tkinter.messagebox.showinfo(
+                        'Success', 'Account has been created')
     elif username == '' or password == '':
         tkinter.messagebox.showerror(
             'Error', 'Please enter username and password')

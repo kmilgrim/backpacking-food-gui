@@ -143,6 +143,8 @@ class App(customtkinter.CTk):
         self.textbox.grid(
             row=0, column=1, padx=15, pady=15, sticky="ns")
         self.textbox.insert("0.0", "Ingredients List..." * 1)
+        # configure textbox to be read-only
+        self.textbox.configure(state="disabled")
 
         # get the details entered by user
 
@@ -183,10 +185,15 @@ class App(customtkinter.CTk):
         self.generate_cal_count(ingredient_list)
 
     def update_textbox(self, ingredient_list):
+        # configure textbox to be read-only
+        self.textbox.configure(state="normal")
         self.textbox.delete("0.0", "end")  # delete all text
 
         for ingredient in ingredient_list:
             self.textbox.insert("end", ingredient + "\n")
+
+        # configure textbox to be read-only
+        self.textbox.configure(state="disabled")
 
     def delete_meals(self):
         meal_list = []
